@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/template/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<!-- Evento metadata para chamar o metodo criado para carregar a pesquisa  -->
+		<f:metadata>
+			<f:event listener="#{funcionarioBean.carregarPesquisa}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formfuncionarioPesquisa">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:outputLabel value="funcionarios"></p:outputLabel>
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable id="painelfuncionarioPesquisa"
+				emptyMessage="Nenhum registro encontrado."
+				value="#{funcionarioBean.listaFuncionarios}"
+				filteredValue="#{funcionarioBean.listaFuncionariosFiltrados}"
+				var="funcionario" rows="16" paginator="true">
+
+				<f:facet name="footer">
+					<p:button value="Novo"
+						outcome="/pages/funcionarioCadastro.xhtml">
+						<f:param name="fun_acao" value="Novo" />
+					</p:button>
+				</f:facet>
+
+				<p:column headerText="Código">
+					<h:outputLabel value="#{funcionario.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" filterBy="#{funcionario.nome}"
+					sortBy="#{funcionario.nome}">
+					<h:outputLabel value="#{funcionario.nome}" />
+				</p:column>
+				
+				<p:column headerText="CPF" filterBy="#{funcionario.cpf}"
+					sortBy="#{funcionario.cpf}">
+					<h:outputLabel value="#{funcionario.cpf}" />
+				</p:column>
+				
+				<p:column headerText="Função" filterBy="#{funcionario.funcao}"
+					sortBy="#{funcionario.funcao}">
+					<h:outputLabel value="#{funcionario.funcao}" />
+				</p:column>
+
+				<p:column headerText="Opções">
+					<p:button value="Excluir" outcome="/pages/funcionarioCadastro.xhtml">
+						<f:param name="fun_acao" value="Excluir" />
+						<f:param name="fun_codigo" value="#{funcionario.codigo}" />
+					</p:button>
+
+					<p:button value="Editar" outcome="/pages/funcionarioCadastro.xhtml">
+						<f:param name="fun_acao" value="Editar" />
+						<f:param name="fun_codigo" value="#{funcionario.codigo}" />
+					</p:button>
+
+
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

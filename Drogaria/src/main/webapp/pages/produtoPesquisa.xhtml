@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/template/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<!-- Evento metadata para chamar o metodo criado para carregar a pesquisa  -->
+		<f:metadata>
+			<f:event listener="#{produtoBean.carregarPesquisa}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formProdutoPesquisa">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:outputLabel value="Produtos"></p:outputLabel>
+				</f:facet>
+			</p:toolbar>
+
+
+			<p:dataTable id="painelProdutoPesquisa"
+				emptyMessage="Nenhum registro encontrado."
+				value="#{produtoBean.listaProdutos}"
+				filteredValue="#{produtoBean.listaProdutosFiltrados}" var="produto"
+				rows="16" paginator="true">
+
+				<f:facet name="header">
+					<p:commandLink id="pdf" ajax="false">
+						<p:graphicImage library="images" name="pdf.png" width="24" />
+						<p:dataExporter type="pdf" target="painelProdutoPesquisa"
+							fileName="produtos" encoding="ISO-8859-1"/>
+					</p:commandLink>
+
+					<p:spacer height="20" />
+
+					<p:commandLink id="excel" ajax="false">
+						<p:graphicImage library="images" name="excel.png" width="24" />
+						<p:dataExporter type="xls" target="painelProdutoPesquisa"
+							fileName="produtos" />
+					</p:commandLink>
+				</f:facet>
+
+				<f:facet name="footer" exportable="false">
+					<p:button value="Novo" outcome="/pages/produtoCadastro.xhtml" exportable="false">
+						<f:param name="pro_acao" value="Novo" />
+					</p:button>
+				</f:facet>
+
+				<p:column headerText="Código" width="10%">
+					<h:outputLabel value="#{produto.codigo}" />
+				</p:column>
+
+				<p:column headerText="Descrição" filterBy="#{produto.descricao}"
+					sortBy="#{produto.descricao}">
+					<h:outputLabel value="#{produto.descricao}" />
+				</p:column>
+
+				<p:column headerText="Fabricante"
+					filterBy="#{produto.fabricante.descricao}"
+					sortBy="#{produto.fabricante.descricao}">
+					<h:outputLabel value="#{produto.fabricante.descricao}" />
+				</p:column>
+
+				<p:column headerText="Preço" filterBy="#{produto.preco}" width="15%"
+					sortBy="#{produto.preco}">
+					<h:outputLabel value="#{produto.preco}">
+						<f:convertNumber currencySymbol="R$" type="currency" />
+					</h:outputLabel>
+				</p:column>
+
+				<p:column headerText="Quantidade" filterBy="#{produto.quantidade}"
+					width="15%" sortBy="#{produto.quantidade}">
+					<h:outputLabel value="#{produto.quantidade}" />
+				</p:column>
+
+				<p:column headerText="Opções" width="15%" exportable="false">
+					<p:button value="Excluir" outcome="/pages/produtoCadastro.xhtml">
+						<f:param name="pro_acao" value="Excluir" />
+						<f:param name="pro_codigo" value="#{produto.codigo}" />
+					</p:button>
+
+					<p:button value="Editar" outcome="/pages/produtoCadastro.xhtml">
+						<f:param name="pro_acao" value="Editar" />
+						<f:param name="pro_codigo" value="#{produto.codigo}" />
+					</p:button>
+
+
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>
